@@ -11,6 +11,7 @@ import {
   Check,
   TrendingUp,
   Target,
+  Download,
 } from 'lucide-react';
 import { StudyLogItem } from '../../types';
 import { toPersianDigits } from '../../utils/persianUtils';
@@ -20,12 +21,14 @@ interface DailyTrackerScreenProps {
   onOpenAddReport: () => void;
   onOpenSchedules: () => void;
   onOpenTimer: () => void;
+  onOpenDownload?: () => void;
 }
 
 export const DailyTrackerScreen: React.FC<DailyTrackerScreenProps> = ({
   onOpenAddReport,
   onOpenSchedules,
   onOpenTimer,
+  onOpenDownload,
 }) => {
   const [selectedDay, setSelectedDay] = useState<number>(8);
   const [hasRegisteredClass, setHasRegisteredClass] = useState<boolean>(false);
@@ -128,6 +131,35 @@ export const DailyTrackerScreen: React.FC<DailyTrackerScreenProps> = ({
           );
         })}
       </div>
+
+      {/* Quick Download App Banner */}
+      {onOpenDownload && (
+        <button
+          type="button"
+          onClick={onOpenDownload}
+          className="w-full bg-gradient-to-r from-slate-900 to-slate-800 hover:from-slate-800 hover:to-slate-700 text-white rounded-2xl p-3 my-1.5 shadow-md flex items-center justify-between border border-slate-700/80 transition-all text-right group"
+        >
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-xl bg-[#E83B67] group-hover:bg-rose-600 flex items-center justify-center text-white shadow-xs transition-colors">
+              <Download className="w-4 h-4 animate-bounce-subtle" />
+            </div>
+            <div>
+              <div className="flex items-center gap-1.5">
+                <span className="text-xs font-bold text-white">دانلود نسخه موبایل (APK / PWA)</span>
+                <span className="text-[9px] bg-rose-500/20 text-rose-300 border border-rose-500/30 px-1.5 py-0.2 rounded-full font-mono">
+                  v1.2.0
+                </span>
+              </div>
+              <span className="text-[10px] text-slate-400 block mt-0.5">
+                دانلود مستقیم پکیج اندروید، سورس‌کد و افزونه وردپرس
+              </span>
+            </div>
+          </div>
+          <span className="text-[11px] font-bold text-rose-400 bg-rose-500/10 border border-rose-500/20 px-2.5 py-1 rounded-xl">
+            دانلود ←
+          </span>
+        </button>
+      )}
 
       {/* Performance Summary Pill Banner */}
       <div className="w-full bg-white border border-slate-200/90 rounded-2xl p-2.5 my-2 flex items-center justify-between shadow-2xs">

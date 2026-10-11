@@ -1,0 +1,28 @@
+{
+  "name": "ره کنکور | سامانه رهگیری مطالعه و سالن مطالعه آنلاین",
+  "short_name": "ره کنکور",
+  "description": "اپلیکیشن هوشمند برنامه‌ریزی، رهگیری ساعات مطالعه و سالن مطالعه آنلاین رقابتی داوطلبان ره کنکور",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#EFF3F1",
+  "theme_color": "#E83B67",
+  "orientation": "portrait-primary",
+  "lang": "fa",
+  "dir": "rtl",
+  "categories": ["education", "productivity"],
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

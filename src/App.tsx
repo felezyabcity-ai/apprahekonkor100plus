@@ -102,6 +102,7 @@ export default function App() {
               setActiveSubView('main');
             }}
             onOpenCalendar={() => setCurrentTab('calendar')}
+            onOpenDownload={() => setIsWordPressModalOpen(true)}
           />
         );
       case 'calendar':
@@ -110,6 +111,7 @@ export default function App() {
             onOpenAddReport={() => setIsAddReportOpen(true)}
             onOpenSchedules={() => setActiveSubView('schedules')}
             onOpenTimer={() => setActiveSubView('timer')}
+            onOpenDownload={() => setIsWordPressModalOpen(true)}
           />
         );
       case 'study_room':
@@ -121,13 +123,14 @@ export default function App() {
       case 'counseling':
         return <CounselingScreen />;
       case 'widgets':
-        return <WidgetsScreen />;
+        return <WidgetsScreen onOpenDownload={() => setIsWordPressModalOpen(true)} />;
       default:
         return (
           <DailyTrackerScreen
             onOpenAddReport={() => setIsAddReportOpen(true)}
             onOpenSchedules={() => setActiveSubView('schedules')}
             onOpenTimer={() => setActiveSubView('timer')}
+            onOpenDownload={() => setIsWordPressModalOpen(true)}
           />
         );
     }
@@ -170,6 +173,24 @@ export default function App() {
       <div className="flex-1 flex flex-col relative overflow-hidden">
         {renderContent()}
       </div>
+
+      {/* Persistent Floating Mobile Download FAB (Always accessible on phone screen) */}
+      {activeSubView !== 'timer' && (
+        <button
+          type="button"
+          onClick={() => setIsWordPressModalOpen(true)}
+          className="absolute bottom-18 left-3 z-30 flex items-center gap-1.5 bg-gradient-to-r from-emerald-600 to-[#E83B67] hover:brightness-110 active:scale-95 text-white px-3.5 py-2 rounded-2xl shadow-xl shadow-black/30 text-xs font-bold transition-all border border-white/20 group"
+          title="دانلود مستقیم فایل APK و اپلیکیشن موبایل"
+        >
+          <div className="w-5 h-5 rounded-lg bg-white/20 flex items-center justify-center">
+            <Download className="w-3.5 h-3.5 text-white" />
+          </div>
+          <span className="flex items-center gap-1">
+            <span>دانلود مستقیم فایل APK</span>
+            <span className="text-[10px] bg-white/20 px-1 rounded-sm font-mono">اندروید</span>
+          </span>
+        </button>
+      )}
 
       {/* Bottom Navigation (Only visible when not in standalone distraction-free timer) */}
       {activeSubView !== 'timer' && (

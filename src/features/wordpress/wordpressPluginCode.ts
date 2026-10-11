@@ -39,18 +39,18 @@ class RaheKonkur_Connect {
         add_action('admin_init', array($this, 'register_settings'));
         add_action('rest_api_init', array($this, 'register_rest_routes'));
         add_shortcode('rahe_konkur_download', array($this, 'render_download_shortcode'));
-        add_shortcode('hadaf_plus_download', array($this, 'render_download_shortcode')); // backward compatibility
+        add_shortcode('hadaf_plus_download', array($this, 'render_download_shortcode')); // سازگاری با نسخه‌های قبل
         add_shortcode('rahe_konkur_stats', array($this, 'render_stats_shortcode'));
     }
 
     public function init_plugin() {
-        // Create custom database table for study logs sync if needed
+        // ایجاد جدول پایگاه داده برای ثبت لاگ‌های مطالعه در صورت نیاز
         $this->maybe_create_tables();
     }
 
     private function maybe_create_tables() {
         global $wpdb;
-        $table_name = $wpdb->prefix . 'hadaf_study_logs';
+        $table_name = $wpdb->prefix . 'rahe_konkur_study_logs';
         $charset_collate = $wpdb->get_charset_collate();
 
         $sql = "CREATE TABLE IF NOT EXISTS $table_name (
@@ -77,10 +77,10 @@ class RaheKonkur_Connect {
      */
     public function add_admin_menu() {
         add_menu_page(
-            'هدف پلاس | اپلیکیشن',
-            'اپلیکیشن هدف پلاس',
+            'ره کنکور | اپلیکیشن',
+            'اپلیکیشن ره کنکور',
             'manage_options',
-            'hadaf-plus-settings',
+            'rahe-konkur-settings',
             array($this, 'render_admin_page'),
             'dashicons-smartphone',
             30
@@ -88,7 +88,7 @@ class RaheKonkur_Connect {
     }
 
     public function register_settings() {
-        register_setting('hadaf_plus_group', self::OPTION_KEY);
+        register_setting('rahe_konkur_group', self::OPTION_KEY);
     }
 
     /**
@@ -96,27 +96,27 @@ class RaheKonkur_Connect {
      */
     public function render_admin_page() {
         $options = get_option(self::OPTION_KEY, array(
-            'apk_url' => 'https://hadafplus.ir/downloads/hadaf-plus.apk',
+            'apk_url' => 'https://rahekonkur.ir/downloads/rahe-konkur.apk',
             'app_version' => '1.2.0',
             'version_code' => 12,
-            'bazaar_url' => 'https://cafebazaar.ir/app/ir.hadafplus.app',
-            'myket_url' => 'https://myket.ir/app/ir.hadafplus.app',
-            'ios_pwa_url' => 'https://app.hadafplus.ir',
+            'bazaar_url' => 'https://cafebazaar.ir/app/ir.rahekonkur.app',
+            'myket_url' => 'https://myket.ir/app/ir.rahekonkur.app',
+            'ios_pwa_url' => 'https://app.rahekonkur.ir',
             'api_secret_key' => wp_generate_password(32, false),
             'force_update' => '0',
             'changelog' => "• اضافه شدن سالن مطالعه آنلاین رسمی\\n• بهبود کرنومتر و حالت پومودورو\\n• سیستم رتبه‌بندی هفتگی و روزانه",
-            'download_count' => 1450,
+            'download_count' => 1850,
         ));
         ?>
         <div class="wrap" dir="rtl" style="font-family: Tahoma, Arial, sans-serif; max-width: 900px;">
             <h1 style="display:flex;align-items:center;gap:10px;">
-                <span class="dashicons dashicons-smartphone" style="font-size:32px;width:32px;height:32px;color:#FF7A30;"></span>
-                مدیریت اتصال اپلیکیشن موبایل هدف پلاس
+                <span class="dashicons dashicons-smartphone" style="font-size:32px;width:32px;height:32px;color:#E83B67;"></span>
+                مدیریت اتصال اپلیکیشن موبایل ره کنکور
             </h1>
             <p>از این بخش می‌توانید لینک‌های دانلود اپلیکیشن، فایل APK مستقیم، کلید امنیتی ارتباط REST API و وضعیت آپدیت‌های برنامه را تنظیم کنید.</p>
 
-            <form method="post" action="options.php" style="background:#fff;padding:20px;border-radius:12px;border:1px solid #ddd;box-shadow:0 2px 4px rgba(0,0,0,0.05);margin-top:20px;">
-                <?php settings_fields('hadaf_plus_group'); ?>
+            <form method="post" action="options.php" style="background:#fff;padding:24px;border-radius:16px;border:1px solid #e2e8f0;box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);margin-top:20px;">
+                <?php settings_fields('rahe_konkur_group'); ?>
 
                 <table class="form-table" role="presentation">
                     <tr>
@@ -178,7 +178,7 @@ class RaheKonkur_Connect {
             <div style="background:#f8fafc;padding:20px;border-radius:12px;border:1px solid #e2e8f0;margin-top:20px;">
                 <h3 style="margin-top:0;">شورت‌کد نمایش جعبه دانلود در برگه یا نوشته‌ها</h3>
                 <p>کافیست شورت‌کد زیر را در هر صفحه‌ای از سایت وردپرسی خود قرار دهید:</p>
-                <code style="background:#fff;padding:8px 12px;border:1px solid #ccc;border-radius:6px;font-size:14px;direction:ltr;display:inline-block;">[hadaf_plus_download]</code>
+                <code style="background:#fff;padding:8px 12px;border:1px solid #ccc;border-radius:6px;font-size:14px;direction:ltr;display:inline-block;">[rahe_konkur_download]</code>
             </div>
         </div>
         <?php
@@ -188,43 +188,57 @@ class RaheKonkur_Connect {
      * REST API Routes for Mobile Flutter App
      */
     public function register_rest_routes() {
-        register_rest_route('hadaf-plus/v1', '/check-update', array(
+        // Rahe Konkur primary namespace
+        register_rest_route('rahe-konkur/v1', '/check-update', array(
             'methods' => 'GET',
             'callback' => array($this, 'api_check_update'),
             'permission_callback' => '__return_true',
         ));
 
-        register_rest_route('hadaf-plus/v1', '/app-info', array(
+        register_rest_route('rahe-konkur/v1', '/app-info', array(
             'methods' => 'GET',
             'callback' => array($this, 'api_get_app_info'),
             'permission_callback' => '__return_true',
         ));
 
-        register_rest_route('hadaf-plus/v1', '/download-apk', array(
+        register_rest_route('rahe-konkur/v1', '/download-apk', array(
             'methods' => 'GET',
             'callback' => array($this, 'api_handle_download_redirect'),
             'permission_callback' => '__return_true',
         ));
 
-        // Sync study log
-        register_rest_route('hadaf-plus/v1', '/sync-study-log', array(
+        register_rest_route('rahe-konkur/v1', '/sync-study-log', array(
             'methods' => 'POST',
             'callback' => array($this, 'api_sync_study_log'),
             'permission_callback' => array($this, 'validate_api_key'),
         ));
 
-        // Get student leaderboard from WP
-        register_rest_route('hadaf-plus/v1', '/leaderboard', array(
+        register_rest_route('rahe-konkur/v1', '/leaderboard', array(
             'methods' => 'GET',
             'callback' => array($this, 'api_get_leaderboard'),
             'permission_callback' => '__return_true',
+        ));
+
+        // Backward compatibility routes for hadaf-plus
+        register_rest_route('hadaf-plus/v1', '/check-update', array(
+            'methods' => 'GET',
+            'callback' => array($this, 'api_check_update'),
+            'permission_callback' => '__return_true',
+        ));
+        register_rest_route('hadaf-plus/v1', '/sync-study-log', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'api_sync_study_log'),
+            'permission_callback' => array($this, 'validate_api_key'),
         ));
     }
 
     public function validate_api_key($request) {
         $options = get_option(self::OPTION_KEY);
         $expected_key = isset($options['api_secret_key']) ? $options['api_secret_key'] : '';
-        $provided_key = $request->get_header('x-hadaf-api-key');
+        $provided_key = $request->get_header('x-rahe-konkur-api-key');
+        if (!$provided_key) {
+            $provided_key = $request->get_header('x-hadaf-api-key');
+        }
 
         if (!$provided_key || $provided_key !== $expected_key) {
             return new WP_Error('unauthorized', 'کلید امنیتی معتبر نیست', array('status' => 401));
@@ -235,7 +249,7 @@ class RaheKonkur_Connect {
     public function api_check_update($request) {
         $options = get_option(self::OPTION_KEY);
         $current_version_code = (int) $request->get_param('version_code');
-        $latest_version_code = (int) (isset($options['version_code']) ? $options['version_code'] : 1);
+        $latest_version_code = (int) (isset($options['version_code']) ? $options['version_code'] : 12);
 
         $has_update = $latest_version_code > $current_version_code;
 
@@ -243,7 +257,7 @@ class RaheKonkur_Connect {
             'has_update' => $has_update,
             'latest_version' => $options['app_version'] ?? '1.2.0',
             'version_code' => $latest_version_code,
-            'apk_download_url' => home_url('/wp-json/hadaf-plus/v1/download-apk'),
+            'apk_download_url' => home_url('/wp-json/rahe-konkur/v1/download-apk'),
             'bazaar_url' => $options['bazaar_url'] ?? '',
             'myket_url' => $options['myket_url'] ?? '',
             'force_update' => !empty($options['force_update']),
@@ -254,13 +268,13 @@ class RaheKonkur_Connect {
     public function api_get_app_info() {
         $options = get_option(self::OPTION_KEY);
         return rest_ensure_response(array(
-            'app_name' => 'هدف پلاس',
+            'app_name' => 'ره کنکور',
             'version' => $options['app_version'] ?? '1.2.0',
-            'apk_url' => home_url('/wp-json/hadaf-plus/v1/download-apk'),
+            'apk_url' => home_url('/wp-json/rahe-konkur/v1/download-apk'),
             'bazaar_url' => $options['bazaar_url'] ?? '',
             'myket_url' => $options['myket_url'] ?? '',
             'ios_pwa_url' => $options['ios_pwa_url'] ?? '',
-            'downloads_count' => (int) ($options['download_count'] ?? 1450),
+            'downloads_count' => (int) ($options['download_count'] ?? 1850),
         ));
     }
 
@@ -269,20 +283,20 @@ class RaheKonkur_Connect {
         $apk_url = !empty($options['apk_url']) ? $options['apk_url'] : '';
 
         // Increment download counter
-        $options['download_count'] = ((int) ($options['download_count'] ?? 1450)) + 1;
+        $options['download_count'] = ((int) ($options['download_count'] ?? 1850)) + 1;
         update_option(self::OPTION_KEY, $options);
 
         if (!empty($apk_url)) {
             wp_redirect($apk_url);
             exit;
         } else {
-            return new WP_Error('not_found', 'فایل APK تنظیم نشده است', array('status' => 404));
+            return new WP_Error('not_found', 'فایل APK در تنظیمات افزونه مشخص نشده است', array('status' => 404));
         }
     }
 
     public function api_sync_study_log($request) {
         global $wpdb;
-        $table_name = $wpdb->prefix . 'hadaf_study_logs';
+        $table_name = $wpdb->prefix . 'rahe_konkur_study_logs';
 
         $params = $request->get_json_params();
         $user_id = (int) ($params['user_id'] ?? get_current_user_id());
@@ -308,14 +322,14 @@ class RaheKonkur_Connect {
 
         return rest_ensure_response(array(
             'success' => true,
-            'message' => 'گزارش مطالعه با موفقیت در وردپرس همگام شد',
+            'message' => 'گزارش مطالعه داوطلب با موفقیت در وردپرس ثبت گردید',
             'log_id' => $wpdb->insert_id,
         ));
     }
 
     public function api_get_leaderboard() {
         global $wpdb;
-        $table_name = $wpdb->prefix . 'hadaf_study_logs';
+        $table_name = $wpdb->prefix . 'rahe_konkur_study_logs';
 
         $results = $wpdb->get_results("
             SELECT user_id, 
@@ -335,7 +349,7 @@ class RaheKonkur_Connect {
     }
 
     /**
-     * Frontend Shortcode: [hadaf_plus_download]
+     * Frontend Shortcode: [rahe_konkur_download]
      */
     public function render_download_shortcode($atts) {
         $options = get_option(self::OPTION_KEY);
@@ -350,7 +364,7 @@ class RaheKonkur_Connect {
         <div class="rahe-konkur-download-card" dir="rtl" style="background:#fff;border-radius:24px;border:1px solid #e2ece9;box-shadow:0 12px 28px -6px rgba(232,59,103,0.08);padding:26px;max-width:540px;margin:24px auto;font-family:Vazirmatn, Tahoma, sans-serif;text-align:right;">
             <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">
                 <div style="width:62px;height:62px;border-radius:18px;background:#EFF3F1;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(232,59,103,0.15);border:1px solid #dce5e2;">
-                    <!-- Mini 4x4 matrix icon -->
+                    <!-- Rahe Konkur 4x4 matrix icon -->
                     <div style="display:grid;grid-template-columns:repeat(4, 9px);gap:4px;">
                         <span style="width:9px;height:9px;border-radius:50%;background:#E83B67;box-shadow:0 0 0 2px #F69EB5;"></span>
                         <span style="width:9px;height:9px;border-radius:50%;border:1.5px solid #A0AAB0;"></span>
@@ -371,13 +385,13 @@ class RaheKonkur_Connect {
                     </div>
                 </div>
                 <div>
-                    <h3 style="margin:0;font-size:18px;font-bold;color:#0f172a;">دانلود اپلیکیشن ره کنکور</h3>
+                    <h3 style="margin:0;font-size:18px;font-weight:bold;color:#0f172a;">دانلود اپلیکیشن ره کنکور</h3>
                     <p style="margin:4px 0 0;font-size:12px;color:#64748b;">نسخه رسمی <?php echo $version; ?> | مسیر هوشمند موفقیت در کنکور</p>
                 </div>
             </div>
 
             <p style="font-size:13px;color:#475569;line-height:1.7;margin-bottom:20px;">
-                سالن مطالعه رقابتی، ماتریس پیگیری تسلط بر دروس، کرنومتر هوشمند بدون حواس‌پرتی و زمان‌بندی روزانه کنکور.
+                سالن مطالعه رقابتی، ماتریس پیگیری تسلط بر دروس، کرنومتر هوشمند بدون حواس‌پرتی و زمان‌بندی روزانه کنکور سراسری.
             </p>
 
             <div style="display:flex;flex-direction:column;gap:10px;">
@@ -405,7 +419,7 @@ class RaheKonkur_Connect {
 
     public function render_stats_shortcode() {
         $options = get_option(self::OPTION_KEY);
-        $count = number_format_i18n((int) ($options['download_count'] ?? 1450));
+        $count = number_format_i18n((int) ($options['download_count'] ?? 1850));
         return '<span class="rahe-konkur-download-count" style="font-weight:bold;color:#E83B67;">' . esc_html($count) . ' دریافت</span>';
     }
 }
@@ -419,7 +433,7 @@ import 'package:dio/dio.dart';
 
 class WordPressSyncService {
   final Dio _dio;
-  final String baseUrl; // e.g. "https://yoursite.com/wp-json/hadaf-plus/v1"
+  final String baseUrl; // e.g. "https://yoursite.com/wp-json/rahe-konkur/v1"
   final String apiKey;
 
   WordPressSyncService({
@@ -429,7 +443,7 @@ class WordPressSyncService {
           baseUrl: baseUrl,
           headers: {
             'Content-Type': 'application/json',
-            'x-hadaf-api-key': apiKey,
+            'x-rahe-konkur-api-key': apiKey,
           },
           connectTimeout: const Duration(seconds: 10),
           receiveTimeout: const Duration(seconds: 10),

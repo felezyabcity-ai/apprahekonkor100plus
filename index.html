@@ -8,11 +8,23 @@
     <meta property="og:title" content="ره کنکور | سامانه رهگیری مطالعه و سالن مطالعه آنلاین (Rahe Konkur)" />
     <meta property="og:description" content="اپلیکیشن هوشمند برنامه‌ریزی، رهگیری ساعات مطالعه و سالن مطالعه آنلاین رقابتی داوطلبان ره کنکور" />
     <meta name="theme-color" content="#E83B67" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="ره کنکور" />
+    <link rel="manifest" href="/manifest.json" />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch(() => {});
+        });
+      }
+    </script>
   </head>
   <body class="bg-[#EFF3F1] text-slate-900 font-sans antialiased selection:bg-[#E83B67] selection:text-white">
     <div id="root"></div>

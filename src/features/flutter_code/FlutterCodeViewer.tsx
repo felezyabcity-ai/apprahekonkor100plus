@@ -9,7 +9,14 @@ import {
   Sparkles,
   Download,
   Terminal,
+  FolderArchive,
+  Loader2,
 } from 'lucide-react';
+import {
+  generateFlutterProjectZip,
+  triggerFileDownload,
+  formatBytes,
+} from '../wordpress/zipGenerator';
 
 interface FlutterCodeViewerProps {
   isOpen: boolean;
@@ -22,6 +29,23 @@ export const FlutterCodeViewer: React.FC<FlutterCodeViewerProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState<'structure' | 'pubspec' | 'riverpod_code'>('structure');
   const [copied, setCopied] = useState<string | null>(null);
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [downloadMsg, setDownloadMsg] = useState<string | null>(null);
+
+  const handleDownloadProjectZip = async () => {
+    try {
+      setIsDownloading(true);
+      setDownloadMsg(null);
+      const { blob, size } = await generateFlutterProjectZip();
+      triggerFileDownload(blob, 'rahe-konkur-flutter-project.zip');
+      setDownloadMsg(`پروژه فلاتر دانلود شد (${formatBytes(size)})`);
+      setTimeout(() => setDownloadMsg(null), 4000);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsDownloading(false);
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -296,14 +320,48 @@ final studyTimerProvider = StateNotifierProvider<StudyTimerNotifier, TimerState>
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={onClose}
-            className="p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800"
-          >
-            <X className="w-5 h-5" />
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              disabled={isDownloading}
+              onClick={handleDownloadProjectZip}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#E83B67] hover:bg-rose-600 text-white rounded-xl text-xs font-bold transition-all disabled:opacity-70 shadow-sm"
+            >
+              {isDownloading ? (
+                <>
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  <span>در حال فشرده‌سازی...</span>
+                </>
+              ) : (
+                <>
+                  <FolderArchive className="w-3.5 h-3.5" />
+                  <span>دانلود کل پروژه Flutter (ZIP)</span>
+                </>
+              )}
+            </button>
+
+            <button
+              type="button"
+              onClick={onClose}
+              className="p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
+
+        {downloadMsg && (
+          <div className="bg-emerald-950/80 border-b border-emerald-800/80 px-4 py-2 text-xs text-emerald-300 flex items-center justify-between">
+            <span>{downloadMsg}</span>
+            <button
+              type="button"
+              onClick={() => setDownloadMsg(null)}
+              className="text-emerald-400 hover:text-emerald-200"
+            >
+              ×
+            </button>
+          </div>
+        )}
 
         {/* Tab Navigation */}
         <div className="flex items-center gap-2 px-5 pt-3 bg-slate-950/60 border-b border-slate-800 text-xs">

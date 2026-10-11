@@ -9,10 +9,15 @@ import {
   Layers,
   Heart,
   ChevronLeft,
+  Download,
 } from 'lucide-react';
 import { toPersianDigits } from '../../utils/persianUtils';
 
-export const WidgetsScreen: React.FC = () => {
+interface WidgetsScreenProps {
+  onOpenDownload?: () => void;
+}
+
+export const WidgetsScreen: React.FC<WidgetsScreenProps> = ({ onOpenDownload }) => {
   // Test percentage calculator mini widget
   const [correct, setCorrect] = useState<number>(25);
   const [wrong, setWrong] = useState<number>(5);
@@ -101,6 +106,26 @@ export const WidgetsScreen: React.FC = () => {
 
       {/* Other Quick Links */}
       <div className="space-y-2">
+        {onOpenDownload && (
+          <div
+            onClick={onOpenDownload}
+            className="bg-slate-900 border border-slate-800 rounded-2xl p-3 flex items-center justify-between text-xs font-bold text-white shadow-md hover:bg-slate-800 cursor-pointer"
+          >
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 rounded-lg bg-[#E83B67] text-white flex items-center justify-center">
+                <Download className="w-4 h-4" />
+              </div>
+              <div>
+                <span>دانلود مستقیم نسخه موبایل ره کنکور</span>
+                <span className="block text-[10px] text-slate-400 font-normal">APK اندروید · افزونه وردپرس · نسخه PWA</span>
+              </div>
+            </div>
+            <span className="text-[10px] bg-rose-500/20 text-rose-300 border border-rose-500/30 px-2 py-0.5 rounded-lg">
+              دانلود ←
+            </span>
+          </div>
+        )}
+
         <div className="bg-white border border-slate-200/80 rounded-2xl p-3 flex items-center justify-between text-xs font-bold text-slate-700 shadow-2xs hover:border-orange-300 cursor-pointer">
           <div className="flex items-center gap-2">
             <div className="w-7 h-7 rounded-lg bg-teal-100 text-teal-600 flex items-center justify-center">

@@ -15,6 +15,7 @@ import {
   Bell,
   ArrowUpRight,
   TrendingUp,
+  Download,
 } from 'lucide-react';
 import { RaheKonkurLogo } from '../../components/RaheKonkurLogo';
 import { toPersianDigits } from '../../utils/persianUtils';
@@ -25,6 +26,7 @@ interface HomeScreenProps {
   onOpenCounseling: () => void;
   onOpenStudyRoom: () => void;
   onOpenCalendar: () => void;
+  onOpenDownload?: () => void;
   userName?: string;
 }
 
@@ -34,6 +36,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   onOpenCounseling,
   onOpenStudyRoom,
   onOpenCalendar,
+  onOpenDownload,
   userName = 'امیر مرادی',
 }) => {
   // 4x4 Matrix Interactive State (representing the 16 daily study/question milestones)
@@ -196,6 +199,34 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
           <Timer className="w-6 h-6 stroke-[2.5]" />
         </div>
       </div>
+
+      {/* Download Mobile App (APK & PWA) Banner */}
+      {onOpenDownload && (
+        <div
+          onClick={onOpenDownload}
+          className="w-full bg-slate-900 hover:bg-slate-800 text-white rounded-3xl p-4 my-2 border border-slate-800 shadow-md cursor-pointer transition-all flex items-center justify-between group text-right"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 rounded-2xl bg-[#E83B67] group-hover:bg-rose-600 flex items-center justify-center text-white shadow-md shadow-rose-950/40 transition-colors">
+              <Download className="w-5 h-5 animate-bounce-subtle" />
+            </div>
+            <div>
+              <div className="flex items-center gap-1.5">
+                <h4 className="text-xs font-black text-white">دانلود نسخه موبایل ره کنکور</h4>
+                <span className="text-[9px] bg-rose-500/20 text-rose-300 border border-rose-500/30 px-1.5 py-0.5 rounded-full font-mono">
+                  v1.2.0
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-400 mt-0.5">
+                دانلود مستقیم فایل APK اندروید · سورس فلاتر · افزونه وردپرس
+              </p>
+            </div>
+          </div>
+          <span className="text-xs font-bold text-rose-400 bg-rose-500/10 border border-rose-500/20 px-3 py-1.5 rounded-xl group-hover:bg-rose-500/20 transition-colors">
+            دانلود فوری ←
+          </span>
+        </div>
+      )}
 
       {/* Modern Bento Feature Grid */}
       <div className="my-2">

@@ -74,18 +74,18 @@ export const PhoneFrame: React.FC<PhoneFrameProps> = ({
               </button>
             </div>
 
-            {/* WordPress Plugin & Download App Trigger */}
+            {/* Direct APK & WordPress Download App Trigger */}
             <button
               type="button"
               onClick={onOpenWordPressModal}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold border transition-all ${
                 isWordPressModalOpen
-                  ? 'bg-orange-500 text-white border-orange-400 shadow-sm'
-                  : 'bg-slate-800 text-orange-400 border-orange-500/40 hover:bg-slate-700'
+                  ? 'bg-rose-500 text-white border-rose-400 shadow-sm'
+                  : 'bg-emerald-950/80 text-emerald-400 border-emerald-500/50 hover:bg-emerald-900/80'
               }`}
             >
-              <Smartphone className="w-3.5 h-3.5 text-orange-400" />
-              <span>دانلود اپ و افزونه وردپرس</span>
+              <Smartphone className="w-3.5 h-3.5 text-emerald-400" />
+              <span>دانلود فایل مستقیم APK و افزونه</span>
             </button>
 
             {/* Flutter Code Inspector Trigger */}
