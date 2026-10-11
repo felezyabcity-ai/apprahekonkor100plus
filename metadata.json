@@ -1,0 +1,6 @@
+{
+  "name": "هدف پلاس | اپلیکیشن مطالعه و سالن مطالعه آنلاین (Hadaf Plus)",
+  "description": "سامانه مدیریت زمان و رهگیری ساعات مطالعه دانش‌آموزی، سالن مطالعه مجازی گروهی و رتبه‌بندی رقابتی",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
